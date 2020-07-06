@@ -197,6 +197,15 @@ impl YamlLoader {
         parser.load(&mut loader, true)?;
         Ok(loader.docs)
     }
+
+    pub fn new() -> Self {
+        Self {
+            docs: Vec::new(),
+            doc_stack: Vec::new(),
+            key_stack: Vec::new(),
+            anchor_map: BTreeMap::new(),
+        }
+    }
 }
 
 macro_rules! define_as (
