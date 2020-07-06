@@ -186,6 +186,30 @@ impl YamlLoader {
         }
     }
 
+    /// Added for yuq
+    pub fn get_last_scalar(&mut self) -> Option<&Yaml> {
+        match self.doc_stack.last_mut() {
+            None => None,
+            Some((Yaml::Hash(ref mut hash), _)) => {
+                hash.back().map(|tuple| tuple.1)
+            },
+            Some((Yaml::Array(ref mut array), _)) => {
+                array.last()
+            },
+            _ => None
+        }
+    }
+
+    /// Added for yuq
+    pub fn get_last_doc(&self) -> Option<&Yaml> {
+        match self.doc_stack.last() {
+            None => None,
+            Some((v @ Yaml::Hash(_), _)) => Some(v),
+            Some((v@ Yaml::Array(_), _)) => Some(v),
+            _ => None
+        }
+    }
+
     pub fn load_from_str(source: &str) -> Result<Vec<Yaml>, ScanError> {
         let mut loader = YamlLoader {
             docs: Vec::new(),
@@ -198,6 +222,7 @@ impl YamlLoader {
         Ok(loader.docs)
     }
 
+    /// Added for yuq
     pub fn new() -> Self {
         Self {
             docs: Vec::new(),
